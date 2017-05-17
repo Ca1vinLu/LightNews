@@ -18,6 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.example.lyz.appexercise.Adapter.NewsAdapter;
@@ -48,6 +50,8 @@ public class MainActivity extends AppCompatActivity
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.progressBar)
+    ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 //        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        recyclerView.addItemDecoration(new LinearItemDecoration(LinearLayout.VERTICAL,getResources().getDimensionPixelOffset(R.dimen.divider_height_8dp)));
+        recyclerView.addItemDecoration(new LinearItemDecoration(LinearLayout.VERTICAL, getResources().getDimensionPixelOffset(R.dimen.divider_height_8dp)));
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swapRefreshLayout);
         swipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
@@ -101,11 +105,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getData() {
+        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("key", "941116166322c0b7da332f80b639c5b8");
         VolleyPost.jsonObjectRequestPost("http://v.juhe.cn/toutiao/index", params, new VolleyPost.VolleyCallback() {
             @Override
             public void onSuccess(JSONObject result) {
+                swipeRefreshLayout.setRefreshing(false);
                 dataList.clear();
                 Gson gson = new Gson();
                 JSONObject jsonObject = result.optJSONObject("result");
@@ -115,8 +121,9 @@ public class MainActivity extends AppCompatActivity
                         NewsBean newsBean = gson.fromJson(jsonArray.getString(i), NewsBean.class);
                         dataList.add(newsBean);
                     }
-                    swipeRefreshLayout.setRefreshing(false);
+
                     adapter.notifyDataSetChanged();
+                    progressBar.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -127,6 +134,9 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onFailure(VolleyError error) {
                 swipeRefreshLayout.setRefreshing(false);
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(),"网络异常",Toast.LENGTH_SHORT).show();
+
             }
         });
     }

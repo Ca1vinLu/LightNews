@@ -19,8 +19,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="#ffffff"
-            app:layoutManager="LinearLayoutManager"
-           />
+            app:layoutManager="LinearLayoutManager" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#ffffff"
+            android:padding="160dp"/>
 
 
     </FrameLayout>
