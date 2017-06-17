@@ -26,6 +26,7 @@ public class NewsDetail extends AppCompatActivity {
 //        webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient());
         webView.loadUrl(getIntent().getStringExtra("url"));
+//        WebViewClient webViewClient=new WebViewClient();
     }
 
     @Override

@@ -83,9 +83,11 @@ public class MainActivity extends AppCompatActivity
         recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this) {
             @Override
             protected void onItemClick(View view, int position) {
-                Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
-                intent.putExtra("url", dataList.get(position).getUrl());
-                startActivity(intent);
+                if (dataList.size() > 0) {
+                    Intent intent = new Intent(getApplicationContext(), NewsDetail.class);
+                    intent.putExtra("url", dataList.get(position).getUrl());
+                    startActivity(intent);
+                }
             }
         });
 //        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
@@ -105,7 +107,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void getData() {
-        progressBar.setVisibility(View.VISIBLE);
+//        progressBar.setVisibility(View.VISIBLE);
         Map<String, String> params = new HashMap<>();
         params.put("key", "941116166322c0b7da332f80b639c5b8");
         VolleyPost.jsonObjectRequestPost("http://v.juhe.cn/toutiao/index", params, new VolleyPost.VolleyCallback() {
@@ -135,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             public void onFailure(VolleyError error) {
                 swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(),"网络异常",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "网络异常", Toast.LENGTH_SHORT).show();
 
             }
         });
