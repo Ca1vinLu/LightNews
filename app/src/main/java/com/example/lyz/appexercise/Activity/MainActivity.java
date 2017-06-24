@@ -124,6 +124,7 @@ public class MainActivity extends AppCompatActivity
                         dataList.add(newsBean);
                     }
 
+                    recyclerView.setVisibility(View.VISIBLE);
                     adapter.notifyDataSetChanged();
                     progressBar.setVisibility(View.INVISIBLE);
                 } catch (JSONException e) {
@@ -135,6 +136,9 @@ public class MainActivity extends AppCompatActivity
 
             @Override
             public void onFailure(VolleyError error) {
+                dataList.clear();
+                adapter.notifyDataSetChanged();
+                recyclerView.setVisibility(View.VISIBLE);
                 swipeRefreshLayout.setRefreshing(false);
                 progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getApplicationContext(), "网络异常", Toast.LENGTH_SHORT).show();
